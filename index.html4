@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Student Pickup Card</title>
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  min-height:100dvh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-family:'Segoe UI',Tahoma,sans-serif;
+  background:#003f46;
+  color:white;
+}
+
+/* Background */
+.bg{
+  position:fixed;
+  inset:0;
+
+  /* Change to your school background */
+  background-image:url("3.png");
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+
+  z-index:-2;
+}
+
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.45);
+  z-index:-1;
+}
+
+/* MAIN */
+.container{
+  width:100%;
+  padding:25px;
+  display:flex;
+  justify-content:center;
+}
+
+.form-box{
+  width:100%;
+  max-width:500px;
+
+  background:rgba(255,255,255,.10);
+
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+
+  border:1px solid rgba(255,255,255,.15);
+
+  border-radius:28px;
+
+  padding:32px 26px;
+
+  max-height:92vh;
+  overflow-y:auto;
+}
+
+/* Heading */
+
+.title{
+  text-align:center;
+  font-size:25px;
+  font-weight:700;
+  margin-bottom:8px;
+}
+
+.sub{
+  text-align:center;
+  color:rgba(255,255,255,.7);
+  margin-bottom:28px;
+  font-size:14px;
+}
+
+/* SECTION */
+
+.section-title{
+  font-size:15px;
+  font-weight:700;
+  margin-top:25px;
+  margin-bottom:15px;
+
+  padding-bottom:8px;
+  border-bottom:1px solid rgba(255,255,255,.15);
+}
+
+/* FORM */
+
+.field{
+  margin-bottom:16px;
+}
+
+.field label{
+  display:block;
+  margin-bottom:7px;
+  font-size:13px;
+}
+
+.field input,
+.field select{
+
+  width:100%;
+
+  border:none;
+  outline:none;
+
+  border-radius:14px;
+
+  padding:15px;
+
+  background:rgba(255,255,255,.12);
+
+  color:white;
+
+  font-size:14px;
+}
+
+.field select option{
+  color:#222;
+}
+
+.field input::placeholder{
+  color:rgba(255,255,255,.4);
+}
+
+/* Image Upload */
+
+.photo-upload{
+  border:1px dashed rgba(255,255,255,.35);
+
+  border-radius:16px;
+
+  padding:20px;
+
+  text-align:center;
+
+  cursor:pointer;
+
+  background:rgba(255,255,255,.06);
+
+  transition:.2s;
+}
+
+.photo-upload:hover{
+  background:rgba(255,255,255,.10);
+}
+
+.photo-upload input{
+  display:none;
+}
+
+.photo-preview{
+  width:100px;
+  height:100px;
+
+  margin:0 auto 12px;
+
+  border-radius:50%;
+
+  object-fit:cover;
+
+  display:none;
+
+  border:3px solid rgba(255,255,255,.5);
+}
+
+.upload-text{
+  font-size:13px;
+}
+
+/* Button */
+
+.generate-btn{
+  width:100%;
+
+  margin-top:15px;
+
+  border:none;
+
+  border-radius:16px;
+
+  padding:16px;
+
+  background:#ffffff;
+
+  color:#003f46;
+
+  font-size:16px;
+
+  font-weight:700;
+
+  cursor:pointer;
+
+  transition:.2s;
+}
+
+.generate-btn:hover{
+  transform:translateY(-1px);
+}
+
+/* =========================
+   CARD SCREEN
+========================= */
+
+.card-screen{
+  display:none;
+
+  flex-direction:column;
+
+  align-items:center;
+
+  gap:18px;
+
+  padding:25px;
+}
+
+/* Pickup Card */
+
+.pickup-card{
+
+  width:min(400px,92vw);
+
+  background:#ffffff;
+
+  color:#23353f;
+
+  border-radius:28px;
+
+  overflow:hidden;
+
+  box-shadow:0 20px 60px rgba(0,0,0,.4);
+}
+
+/* Card top */
+
+.card-header{
+
+  background:#003f46;
+
+  padding:25px 20px;
+
+  text-align:center;
+
+  color:white;
+}
+
+.school-name{
+  font-size:13px;
+  opacity:.8;
+  margin-bottom:4px;
+}
+
+.card-heading{
+  font-size:21px;
+  font-weight:800;
+}
+
+.card-subtitle{
+  font-size:12px;
+  opacity:.7;
+  margin-top:5px;
+}
+
+/* Photo Area */
+
+.student-photo-area{
+  text-align:center;
+  margin-top:-5px;
+  padding-top:22px;
+}
+
+.student-photo{
+
+  width:120px;
+  height:120px;
+
+  border-radius:50%;
+
+  object-fit:cover;
+
+  border:5px solid white;
+
+  box-shadow:0 5px 20px rgba(0,0,0,.15);
+
+  background:#eee;
+}
+
+/* Student Name */
+
+.student-main{
+  text-align:center;
+  padding:14px 20px 20px;
+}
+
+.card-student-name{
+  font-size:22px;
+  font-weight:800;
+}
+
+.card-grade{
+  margin-top:4px;
+
+  font-size:14px;
+
+  color:#14a869;
+
+  font-weight:700;
+}
+
+/* Information */
+
+.info-section{
+  padding:0 25px 25px;
+}
+
+.info-title{
+
+  font-size:12px;
+  text-transform:uppercase;
+
+  color:#7b8b93;
+
+  font-weight:700;
+
+  margin-bottom:10px;
+
+  letter-spacing:.5px;
+}
+
+.info-row{
+
+  padding:12px 0;
+
+  border-bottom:1px solid #edf0f1;
+
+  display:flex;
+
+  justify-content:space-between;
+
+  gap:15px;
+}
+
+.info-row:last-child{
+  border-bottom:none;
+}
+
+.info-label{
+  color:#87949a;
+  font-size:12px;
+}
+
+.info-value{
+
+  font-size:13px;
+
+  font-weight:700;
+
+  text-align:right;
+
+  overflow-wrap:anywhere;
+}
+
+/* Authorization */
+
+.authorization{
+
+  background:#f2f8f6;
+
+  margin:0 20px 22px;
+
+  padding:14px;
+
+  border-radius:14px;
+
+  text-align:center;
+
+  color:#347260;
+
+  font-size:11px;
+
+  line-height:1.5;
+}
+
+/* ID */
+
+.reference{
+
+  text-align:center;
+
+  font-size:10px;
+
+  color:#9ba6aa;
+
+  padding-bottom:20px;
+}
+
+/* ACTIONS */
+
+.actions{
+
+  display:flex;
+
+  gap:12px;
+
+  width:min(400px,92vw);
+}
+
+.btn{
+
+  flex:1;
+
+  border:none;
+
+  border-radius:16px;
+
+  padding:14px;
+
+  cursor:pointer;
+
+  font-size:14px;
+
+  font-weight:700;
+}
+
+.back-btn{
+
+  background:rgba(255,255,255,.15);
+
+  color:white;
+
+  border:1px solid rgba(255,255,255,.15);
+}
+
+.download-btn{
+  background:#003f46;
+  color:white;
+}
+
+/* Mobile */
+
+@media(max-width:500px){
+
+  .form-box{
+    padding:25px 20px;
+  }
+
+  .title{
+    font-size:21px;
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="bg"></div>
+<div class="overlay"></div>
+
+
+<!-- =========================
+     FORM
+========================= -->
+
+<div class="container" id="formScreen">
+
+<div class="form-box">
+
+<div class="title">
+Student Pickup Card
+</div>
+
+<div class="sub">
+Enter the student and authorized adult information
+</div>
+
+
+<!-- STUDENT -->
+
+<div class="section-title">
+Student Information
+</div>
+
+
+<div class="field">
+
+<label>Student Name</label>
+
+<input
+type="text"
+id="studentName"
+placeholder="Full student name"
+>
+
+</div>
+
+
+<div class="field">
+
+<label>Grade</label>
+
+<input
+type="text"
+id="studentGrade"
+placeholder="Example: Grade 7A"
+>
+
+</div>
+
+
+<!-- PHOTO -->
+
+<div class="field">
+
+<label>Student Photo</label>
+
+<label class="photo-upload">
+
+<img
+id="photoPreview"
+class="photo-preview"
+alt="Student photo preview"
+>
+
+<div class="upload-text">
+Click here to upload student photo
+</div>
+
+<input
+type="file"
+id="photoInput"
+accept="image/*"
+onchange="previewImage(event)"
+>
+
+</label>
+
+</div>
+
+
+<!-- ADULT -->
+
+<div class="section-title">
+Authorized Adult Information
+</div>
+
+
+<div class="field">
+
+<label>Adult Full Name</label>
+
+<input
+type="text"
+id="adultName"
+placeholder="Full name"
+>
+
+</div>
+
+
+<div class="field">
+
+<label>Relationship to Student</label>
+
+<select id="relationship">
+
+<option value="">
+Select relationship
+</option>
+
+<option>Mother</option>
+<option>Father</option>
+<option>Grandmother</option>
+<option>Grandfather</option>
+<option>Sister</option>
+<option>Brother</option>
+<option>Aunt</option>
+<option>Uncle</option>
+<option>Guardian</option>
+<option>Driver</option>
+<option>Other Authorized Person</option>
+
+</select>
+
+</div>
+
+
+<div class="field">
+
+<label>Phone Number</label>
+
+<input
+type="tel"
+id="adultPhone"
+placeholder="05XXXXXXXX"
+>
+
+</div>
+
+
+<div class="field">
+
+<label>Email Address</label>
+
+<input
+type="email"
+id="adultEmail"
+placeholder="example@email.com"
+>
+
+</div>
+
+
+<button
+class="generate-btn"
+onclick="generateCard()"
+>
+Generate Pickup Card
+</button>
+
+</div>
+
+</div>
+
+
+
+<!-- =========================
+     CARD
+========================= -->
+
+<div class="card-screen" id="cardScreen">
+
+
+<div class="pickup-card" id="pickupCard">
+
+
+<!-- HEADER -->
+
+<div class="card-header">
+
+<div class="school-name">
+YOUR SCHOOL NAME
+</div>
+
+<div class="card-heading">
+Student Pickup Card
+</div>
+
+<div class="card-subtitle">
+Authorized Student Collection
+</div>
+
+</div>
+
+
+<!-- PHOTO -->
+
+<div class="student-photo-area">
+
+<img
+id="cardStudentPhoto"
+class="student-photo"
+src="https://via.placeholder.com/150"
+>
+
+</div>
+
+
+<!-- STUDENT -->
+
+<div class="student-main">
+
+<div
+class="card-student-name"
+id="cardStudentName"
+>
+Student Name
+</div>
+
+<div
+class="card-grade"
+id="cardStudentGrade"
+>
+Grade
+</div>
+
+</div>
+
+
+<!-- ADULT INFORMATION -->
+
+<div class="info-section">
+
+
+<div class="info-title">
+Authorized Adult
+</div>
+
+
+<div class="info-row">
+
+<div class="info-label">
+Name
+</div>
+
+<div
+class="info-value"
+id="cardAdultName"
+>
+-
+</div>
+
+</div>
+
+
+<div class="info-row">
+
+<div class="info-label">
+Relationship
+</div>
+
+<div
+class="info-value"
+id="cardRelationship"
+>
+-
+</div>
+
+</div>
+
+
+<div class="info-row">
+
+<div class="info-label">
+Phone Number
+</div>
+
+<div
+class="info-value"
+id="cardPhone"
+>
+-
+</div>
+
+</div>
+
+
+<div class="info-row">
+
+<div class="info-label">
+Email
+</div>
+
+<div
+class="info-value"
+id="cardEmail"
+>
+-
+</div>
+
+</div>
+
+
+</div>
+
+
+<div class="authorization">
+
+This card contains information provided for student
+collection purposes. School staff may request identification
+and verify pickup authorization before releasing the student.
+
+</div>
+
+
+<div
+class="reference"
+id="referenceNumber"
+>
+Reference: -
+</div>
+
+
+</div>
+
+
+<!-- BUTTONS -->
+
+<div class="actions">
+
+<button
+class="btn back-btn"
+onclick="goBack()"
+>
+Edit Information
+</button>
+
+<button
+class="btn download-btn"
+onclick="downloadCard()"
+>
+Download Card
+</button>
+
+</div>
+
+
+</div>
+
+
+<!-- HTML2CANVAS -->
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+
+<script>
+
+let studentImage = "";
+
+
+/* =========================
+   IMAGE PREVIEW
+========================= */
+
+function previewImage(event){
+
+  const file = event.target.files[0];
+
+  if(!file){
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onload = function(e){
+
+    studentImage = e.target.result;
+
+    const preview =
+      document.getElementById("photoPreview");
+
+    preview.src = studentImage;
+
+    preview.style.display = "block";
+
+  };
+
+  reader.readAsDataURL(file);
+
+}
+
+
+/* =========================
+   GENERATE REFERENCE
+========================= */
+
+function generateReference(){
+
+  const date =
+    new Date();
+
+  const year =
+    date.getFullYear();
+
+  const random =
+    Math.floor(100000 + Math.random() * 900000);
+
+  return "SP-" + year + "-" + random;
+
+}
+
+
+/* =========================
+   GENERATE CARD
+========================= */
+
+function generateCard(){
+
+  const studentName =
+    document.getElementById("studentName").value.trim();
+
+  const grade =
+    document.getElementById("studentGrade").value.trim();
+
+  const adultName =
+    document.getElementById("adultName").value.trim();
+
+  const relationship =
+    document.getElementById("relationship").value;
+
+  const phone =
+    document.getElementById("adultPhone").value.trim();
+
+  const email =
+    document.getElementById("adultEmail").value.trim();
+
+
+  /* Basic Validation */
+
+  if(
+    !studentName ||
+    !grade ||
+    !adultName ||
+    !relationship ||
+    !phone ||
+    !email
+  ){
+
+    alert(
+      "Please complete all required information."
+    );
+
+    return;
+  }
+
+
+  document.getElementById(
+    "cardStudentName"
+  ).innerText = studentName;
+
+
+  document.getElementById(
+    "cardStudentGrade"
+  ).innerText = grade;
+
+
+  document.getElementById(
+    "cardAdultName"
+  ).innerText = adultName;
+
+
+  document.getElementById(
+    "cardRelationship"
+  ).innerText = relationship;
+
+
+  document.getElementById(
+    "cardPhone"
+  ).innerText = phone;
+
+
+  document.getElementById(
+    "cardEmail"
+  ).innerText = email;
+
+
+  if(studentImage){
+
+    document.getElementById(
+      "cardStudentPhoto"
+    ).src = studentImage;
+
+  }
+
+
+  const reference =
+    generateReference();
+
+
+  document.getElementById(
+    "referenceNumber"
+  ).innerText =
+    "Reference: " + reference;
+
+
+  document.getElementById(
+    "formScreen"
+  ).style.display = "none";
+
+
+  document.getElementById(
+    "cardScreen"
+  ).style.display = "flex";
+
+}
+
+
+/* =========================
+   GO BACK
+========================= */
+
+function goBack(){
+
+  document.getElementById(
+    "cardScreen"
+  ).style.display = "none";
+
+
+  document.getElementById(
+    "formScreen"
+  ).style.display = "flex";
+
+}
+
+
+/* =========================
+   DOWNLOAD CARD
+========================= */
+
+function downloadCard(){
+
+  const card =
+    document.getElementById("pickupCard");
+
+
+  html2canvas(
+    card,
+    {
+      useCORS:true,
+      scale:3,
+      backgroundColor:null
+    }
+  ).then(canvas=>{
+
+    const link =
+      document.createElement("a");
+
+
+    const studentName =
+      document.getElementById(
+        "studentName"
+      ).value.trim();
+
+
+    link.download =
+      "Student-Pickup-" +
+      studentName.replace(/\s+/g,"-") +
+      ".png";
+
+
+    link.href =
+      canvas.toDataURL("image/png");
+
+
+    link.click();
+
+  });
+
+}
+
+</script>
+
+</body>
+</html>
