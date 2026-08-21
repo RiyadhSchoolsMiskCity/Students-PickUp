@@ -1,3 +1,10 @@
+المكتبة
+/
+index.html
+
+
+
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 
@@ -23,6 +30,7 @@ body{
   font-family:'Segoe UI',Tahoma,sans-serif;
   background:#003f46;
   color:white;
+  overflow-x:hidden;
 }
 
 /* Background */
@@ -31,10 +39,14 @@ body{
   inset:0;
 
   /* Change to your school background */
-  background-image:url("3.png");
+  background-image:url("school-bg.png");
   background-size:cover;
-  background-position:center;
+  background-position:center center;
   background-repeat:no-repeat;
+  background-attachment:fixed;
+  width:100vw;
+  height:100svh;
+  min-height:100dvh;
 
   z-index:-2;
 }
@@ -71,6 +83,29 @@ body{
 
   max-height:92vh;
   overflow-y:auto;
+}
+
+/* School logo */
+.school-logo-wrap{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.school-logo{
+  width:min(330px, 78vw);
+  max-height:105px;
+  object-fit:contain;
+  display:block;
+}
+
+.card-logo{
+  width:min(250px, 72%);
+  max-height:82px;
+  object-fit:contain;
+  display:block;
+  margin:0 auto 14px;
 }
 
 /* Heading */
@@ -451,20 +486,80 @@ body{
 .download-btn{
   background:#003f46;
   color:white;
+  overflow-x:hidden;
 }
 
 /* Mobile */
 
 @media(max-width:500px){
+  body{
+    align-items:flex-start;
+  }
+
+  .bg{
+    background-position:center center;
+    background-attachment:scroll;
+  }
+
+  .container,
+  .card-screen{
+    padding:16px;
+  }
 
   .form-box{
-    padding:25px 20px;
+    padding:24px 18px;
+    border-radius:22px;
+    max-height:none;
+    margin:12px 0;
   }
 
   .title{
     font-size:21px;
   }
 
+  .school-logo{
+    width:min(290px, 82vw);
+    max-height:90px;
+  }
+
+  .pickup-card,
+  .actions{
+    width:100%;
+    max-width:400px;
+  }
+}
+
+@media(max-width:380px){
+  .container,
+  .card-screen{
+    padding:10px;
+  }
+
+  .form-box{
+    padding:20px 14px;
+  }
+}
+
+@media(min-width:900px){
+  .bg{
+    background-position:center 42%;
+  }
+}
+
+@media(orientation:landscape) and (max-height:650px){
+  body{
+    align-items:flex-start;
+  }
+
+  .container,
+  .card-screen{
+    padding-top:14px;
+    padding-bottom:14px;
+  }
+
+  .form-box{
+    max-height:none;
+  }
 }
 
 </style>
@@ -483,6 +578,10 @@ body{
 <div class="container" id="formScreen">
 
 <div class="form-box">
+
+<div class="school-logo-wrap">
+  <img src="rsmc-logo.png" alt="Riyadh Schools logo" class="school-logo">
+</div>
 
 <div class="title">
 Student Pickup Card
@@ -656,9 +755,7 @@ Generate Pickup Card
 
 <div class="card-header">
 
-<div class="school-name">
-YOUR SCHOOL NAME
-</div>
+<img src="rsmc-logo.png" alt="Riyadh Schools logo" class="card-logo">
 
 <div class="card-heading">
 Student Pickup Card
